@@ -1,14 +1,19 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.util.Locale;
+
 public class MainClassTest {
     MainClass mainClass = new MainClass();
 
     @Test
-    public void testGetClassNumber() {
-        Assert.assertTrue("Class Number <= 45",mainClass.getClassNumber() > 45);
+    public void testGetClassString() {
+        String expected_string = "hello";
+
+        Assert.assertTrue("ClassString doesn't contains Hello or hello substring"
+                , mainClass.getClassString().toLowerCase(Locale.ROOT).contains(expected_string.toLowerCase()));
     }
 
-    }
+}
 
 
