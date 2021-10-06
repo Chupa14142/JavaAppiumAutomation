@@ -11,7 +11,7 @@ public class MainClassTest {
         String expected_string = "hello";
 
         Assert.assertTrue("ClassString doesn't contains Hello or hello substring"
-                , mainClass.getClassString().toLowerCase(Locale.ROOT).contains(expected_string.toLowerCase()));
+                , mainClass.getClassString().toLowerCase().contains(expected_string.toLowerCase()));
     }
 
 }
