@@ -9,7 +9,7 @@ public class MainClassTest {
 
     @Test
     public void testGetClassString() {
-        Pattern MY_PATTERN = Pattern.compile("\\b^[hH]ello\\b");
+        Pattern MY_PATTERN = Pattern.compile("\\b[hH]ello\\b");
 
         Assert.assertTrue("ClassString doesn't contains Hello or hello substring"
                 ,         MY_PATTERN.matcher(mainClass.getClassString()).find());
