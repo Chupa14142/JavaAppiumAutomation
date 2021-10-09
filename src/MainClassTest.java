@@ -7,10 +7,8 @@ public class MainClassTest {
 
     @Test
     public void testGetClassString() {
-        String expected_string = "hello";
-
         Assert.assertTrue("ClassString doesn't contains Hello or hello substring"
-                , mainClass.getClassString().toLowerCase().contains(expected_string.toLowerCase()));
+                , (mainClass.getClassString().contains("hello") | mainClass.getClassString().contains("Hello")));
     }
 
 }
