@@ -8,7 +8,7 @@ public class MainClassTest {
     @Test
     public void testGetClassString() {
         Assert.assertTrue("ClassString doesn't contains Hello or hello substring"
-                , (mainClass.getClassString().contains("hello") | mainClass.getClassString().contains("Hello")));
+                , (mainClass.getClassString().contains("hello") || mainClass.getClassString().contains("Hello")));
     }
 
 }
