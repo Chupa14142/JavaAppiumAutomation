@@ -14,6 +14,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class FirstTest {
 
@@ -93,6 +95,38 @@ public class FirstTest {
     }
 
 
+    @Test
+    public void checkForTextPresentInTitleTest() {
+        waitForElementPresentAndClick(
+                By.xpath(
+                        "(//*[@class=\"android.widget.TextView\"])[1]"),
+                "Can't find the Search field", 15
+        );
+
+        waitForElementsPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_close_btn']"),
+                "Can't find Clear button"
+        );
+
+        String searchingText = "jaVA";
+
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Can't find the Search field",
+                searchingText);
+
+        boolean isSelectedTextPresent = isSelectedTextPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+                "SelectedText is not Present ",
+                searchingText,
+                15
+        );
+
+        Assert.assertTrue("Text = " + searchingText + " is not present", isSelectedTextPresent == true);
+
+    }
+
+
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         return wait.withMessage(error_message + "\n").until(ExpectedConditions.presenceOfElementLocated(by));
@@ -154,11 +188,43 @@ public class FirstTest {
     }
 
     private boolean waitForElementNotPresent(By by, String error_message, long timeoutInSeconds) {
-        WebDriverWait wait = new WebDriverWait(driver,timeoutInSeconds);
+        WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
         return wait
                 .withMessage(error_message + "\n")
                 .until(ExpectedConditions.invisibilityOfElementLocated(by));
     }
 
+//    private boolean isSelectedTextPresent(By by, String error_message, String expectedText, long timeoutInSeconds) {
+//        List<WebElement> list = waitForElementsPresent(by, error_message, timeoutInSeconds);
+//        boolean result = false;
+//        for (WebElement element : list) {
+//            String getElementTextWithAttribute = element.getAttribute("text").toLowerCase();
+//            if (getElementTextWithAttribute.contains(expectedText.toLowerCase())) {
+//                result = true;
+//            } else {
+//                result = false;
+//            }
+//        }
+//            return result;
+//    }
+
+    private boolean isSelectedTextPresent(By by, String error_message, String expectedText, long timeoutInSeconds) {
+        List<WebElement> list = waitForElementsPresent(by, error_message, timeoutInSeconds);
+        Pattern pattern = Pattern.compile(expectedText.toLowerCase());
+        boolean result = false;
+        for (WebElement element : list) {
+            String getElementTextWithAttribute = element.getAttribute("text").toLowerCase();
+            if (pattern.matcher(getElementTextWithAttribute.toLowerCase()).find()) {
+                result = true;
+            } else {
+                result = false;
+            }
+        }
+        return result;
+    }
+
 
 }
+
+
+
