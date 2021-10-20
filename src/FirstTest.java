@@ -40,8 +40,17 @@ public class FirstTest {
 
     @Test
     public void firstTest(){
-        System.out.println("First test");
+
+        waitForElementPresent(By.xpath("(//*[@class=\"android.widget.TextView\"])[1]"),
+                "",
+                15);
+
+        getElementTextByAttribute(By.xpath("(//*[@class=\"android.widget.TextView\"])[1]"),
+                "Can not find an element");
     }
+
+
+
 
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
@@ -78,6 +87,13 @@ public class FirstTest {
         element.sendKeys(value);
         return element;
     }
+
+    private String getElementTextByAttribute(By by, String error_message) {
+        String elementTextByAttribute = waitForElementPresent(by,error_message).getAttribute("text");
+        return elementTextByAttribute;
+    }
+
+
     
 
 }
