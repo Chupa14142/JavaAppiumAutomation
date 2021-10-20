@@ -100,8 +100,8 @@ public class FirstTest {
     }
 
     private void assertElementHasText(By by, String expectedElementText, String error_message) {
-      String actualElementText = getElementTextByAttribute(by,error_message);
-      Assert.assertEquals(error_message,actualElementText,expectedElementText);
+      String actualElementText = getElementTextByAttribute(by, error_message);
+      Assert.assertEquals(error_message, actualElementText, expectedElementText);
     }
 
 
