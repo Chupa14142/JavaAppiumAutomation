@@ -1,6 +1,7 @@
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.android.AndroidDriver;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -39,15 +40,20 @@ public class FirstTest {
     }
 
     @Test
-    public void firstTest(){
+    public void checkForSearchWikipediaText(){
 
         waitForElementPresent(By.xpath("(//*[@class=\"android.widget.TextView\"])[1]"),
                 "",
                 15);
 
-        getElementTextByAttribute(By.xpath("(//*[@class=\"android.widget.TextView\"])[1]"),
-                "Can not find an element");
+        assertElementHasText(
+                By.xpath("(//*[@class='android.widget.TextView'])[1]"),
+                "Search Wikipedia",
+                "Element has incorrect text");
+
     }
+
+
 
 
 
@@ -91,6 +97,11 @@ public class FirstTest {
     private String getElementTextByAttribute(By by, String error_message) {
         String elementTextByAttribute = waitForElementPresent(by,error_message).getAttribute("text");
         return elementTextByAttribute;
+    }
+
+    private void assertElementHasText(By by, String expectedElementText, String error_message) {
+      String actualElementText = getElementTextByAttribute(by,error_message);
+      Assert.assertEquals(error_message,actualElementText,expectedElementText);
     }
 
 
