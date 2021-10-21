@@ -108,21 +108,21 @@ public class FirstTest {
                 "Can't find Clear button"
         );
 
-        String searchingText = "jaVA";
+        String searchingText = "java";
 
         waitForElementPresentAndSendKeys(
                 By.id("org.wikipedia:id/search_src_text"),
                 "Can't find the Search field",
                 searchingText);
 
-        boolean isSelectedTextPresent = isSelectedTextPresent(
-                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"),
+        boolean isSelectedTextPresent = isSelectedTextPresentInResult(
                 "SelectedText is not Present ",
                 searchingText,
                 15
         );
 
-        Assert.assertTrue("Text = " + searchingText + " is not present", isSelectedTextPresent == true);
+        Assert.assertTrue("Text = " + searchingText + " is not present in every title or description",
+                isSelectedTextPresent == true);
 
     }
 
@@ -223,7 +223,35 @@ public class FirstTest {
         return result;
     }
 
+    private boolean isSelectedTextPresentInResult(String error_message, String expectedText, long timeoutInSeconds) {
+        List<WebElement> titleList = driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title']"));
+        List<WebElement> descriptionList = driver.findElements(By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_description']"));
 
+        Pattern pattern = Pattern.compile(expectedText.toLowerCase());
+
+        if (titleList.size() == descriptionList.size()) {
+            for (int i = 0; i < titleList.size(); i++) {
+                if (
+                        pattern.matcher(titleList.get(i).getAttribute("text").toLowerCase()).find() ||
+                        pattern.matcher(descriptionList.get(i).getAttribute("text").toLowerCase()).find()
+                ) {
+                    return true;
+                }
+            }
+        } else {
+            for (int i = 0; i < titleList.size(); i++) {
+                if (pattern.matcher(titleList.get(i).getAttribute("text").toLowerCase()).find()) {
+                    return true;
+                }
+            }
+            for (int i = 0; i < descriptionList.size(); i++) {
+                if (pattern.matcher(descriptionList.get(i).getAttribute("text").toLowerCase()).find()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }
 
 
