@@ -1,20 +1,23 @@
 import io.appium.java_client.AppiumDriver;
+import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.touch.WaitOptions;
+import io.appium.java_client.touch.offset.PointOption;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Point;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.net.URL;
+import java.time.Duration;
 import java.util.List;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class FirstTest {
@@ -42,6 +45,139 @@ public class FirstTest {
         driver.quit();
     }
 
+
+    @Test
+    public void testSaveSelectedArticle() {
+        waitForElementPresentAndClick(
+                By.xpath(
+                        "(//*[@class=\"android.widget.TextView\"])[1]"),
+                "Can't find the Search field", 15
+        );
+
+        waitForElementsPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_close_btn']"),
+                "Can't find Clear button"
+        );
+
+        String searchingText = "java";
+
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Can't find the Search field",
+                searchingText);
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Can't find Java (programming language) article" + searchingText);
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/view_page_header_image_placeholder"),
+                "Can't find page header"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//android.widget.ImageView[@content-desc='More options']"),
+                "Can't find More options Button"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='Add to reading list']"),
+                "Can't find Add to reading list text"
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='GOT IT']"),
+                "Can't find GOT IT Button"
+        );
+
+        String listName = "Java programming language";
+
+        waitForElementPresentAndSendKeys(
+                By.xpath("//*[@resource-id='org.wikipedia:id/text_input']"),
+                "Can't find Name of this list input",
+                listName
+        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='OK']"),
+                "Can't find OK Button"
+        );
+
+//        waitForElementNotPresent(
+//                By.xpath("//*[@text='OK']"),
+//                "OK Button is displayed",
+//                10
+//        );
+
+        waitForElementPresentAndClick(
+                By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
+                "Can't find Close(X) Button");
+
+        waitForElementPresentAndClick(By.xpath("//*[@content-desc='My lists']"),
+                "Can not find My list Button");
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/item_title'][@text='Java programming language']"),
+                "Can not find List with text = ");
+
+        waitForElementPresent(
+                By.xpath("//*[@text='Java programming language']"),
+                "sdsdsd");
+
+
+        leftSwipeOnElement(
+                By.xpath("//*[@text='Java (programming language)']"),
+                "Can not find Created List"
+        );
+        //*[@resource-id='org.wikipedia:id/page_list_item_container']
+
+        waitForElementNotPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_container']"),
+                "Created List is still Present",
+                10
+        );
+
+
+    }
+
+
+    @Test
+    public void testToSwipeArticle() {
+        waitForElementPresentAndClick(
+                By.xpath(
+                        "(//*[@class=\"android.widget.TextView\"])[1]"),
+                "Can't find the Search field", 15
+        );
+
+        waitForElementsPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_close_btn']"),
+                "Can't find Clear button"
+        );
+
+        String searchingText = "java";
+
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Can't find the Search field",
+                searchingText);
+
+        waitForElementPresentAndClick(
+                By.xpath("(//*[@text='Java'])[1]"),
+                "Can't find first article with text = " + searchingText);
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/view_page_header_image_placeholder"),
+                "Can't find page header");
+
+        swipeToFindElement(
+                By.xpath("//*[@content-desc='Yogyakarta Special Region of Yogyakarta']"),
+                "",
+                10
+        );
+
+
+    }
+
     @Test
     public void checkForSearchWikipediaTextTest() {
 
@@ -53,6 +189,8 @@ public class FirstTest {
                 By.xpath("(//*[@class='android.widget.TextView'])[1]"),
                 "Search Wikipedia",
                 "Element has incorrect text");
+
+
     }
 
     @Test
@@ -233,7 +371,7 @@ public class FirstTest {
             for (int i = 0; i < titleList.size(); i++) {
                 if (
                         pattern.matcher(titleList.get(i).getAttribute("text").toLowerCase()).find() ||
-                        pattern.matcher(descriptionList.get(i).getAttribute("text").toLowerCase()).find()
+                                pattern.matcher(descriptionList.get(i).getAttribute("text").toLowerCase()).find()
                 ) {
                     return true;
                 }
@@ -252,6 +390,62 @@ public class FirstTest {
         }
         return false;
     }
+
+
+    public void swipeUp(long timeOfSwipe) {
+        Dimension size = driver.manage().window().getSize();
+        int x = size.width / 2;
+        int start_y = (int) (size.getHeight() * 0.8);
+        int end_y = (int) (size.getHeight() * 0.2);
+
+        TouchAction action = new TouchAction(driver);
+        action
+                .press(PointOption.point(x, start_y))
+                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(timeOfSwipe)))
+                .moveTo(PointOption.point(x, end_y))
+                .release()
+                .perform();
+    }
+
+    public void swipeUpQuick() {
+        this.swipeUp(200);
+    }
+
+    public void swipeToFindElement(By by, String error_message, int max_swipes) {
+        int already_swiped = 0;
+        while (driver.findElements(by).size() == 0) {
+
+            if (already_swiped > max_swipes) {
+                waitForElementPresent(by, "Can't find element by swiping up. \n" + error_message);
+                return;
+            }
+
+            this.swipeUpQuick();
+            already_swiped++;
+        }
+    }
+
+    public void leftSwipeOnElement(By by, String error_message) {
+        WebElement element = waitForElementPresent(by, error_message);
+        int left_x = element.getLocation().getX();
+        int right_x = left_x + element.getSize().getWidth();
+
+        int upper_y = element.getLocation().getY();
+        int lower_y = upper_y + element.getSize().getHeight();
+        int middle_y = (upper_y + lower_y) / 2;
+        System.out.println(middle_y);
+
+        TouchAction action = new TouchAction(driver);
+        action
+                .press(PointOption.point(right_x, middle_y))
+                .waitAction(WaitOptions.waitOptions(Duration.ofMillis(300)))
+                .moveTo(PointOption.point(left_x, middle_y))
+                .release()
+                .perform();
+
+    }
+
+
 }
 
 
