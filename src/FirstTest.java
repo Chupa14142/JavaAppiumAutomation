@@ -66,8 +66,9 @@ public class FirstTest {
                 "Can't find the Search field",
                 searchingText);
 
+        String articleTitle = "Java (programming language)";
         waitForElementPresentAndClick(
-                By.xpath("//*[@text='Java (programming language)']"),
+                By.xpath("//*[@text='" +  articleTitle + "']"),
                 "Can't find Java (programming language) article" + searchingText);
 
         waitForElementPresent(
@@ -90,24 +91,18 @@ public class FirstTest {
                 "Can't find GOT IT Button"
         );
 
-        String listName = "Java programming language";
+        String name_of_folder = "Java programming language";
 
         waitForElementPresentAndSendKeys(
                 By.xpath("//*[@resource-id='org.wikipedia:id/text_input']"),
                 "Can't find Name of this list input",
-                listName
+                name_of_folder
         );
 
         waitForElementPresentAndClick(
                 By.xpath("//*[@text='OK']"),
                 "Can't find OK Button"
         );
-
-//        waitForElementNotPresent(
-//                By.xpath("//*[@text='OK']"),
-//                "OK Button is displayed",
-//                10
-//        );
 
         waitForElementPresentAndClick(
                 By.xpath("//android.widget.ImageButton[@content-desc='Navigate up']"),
@@ -117,16 +112,16 @@ public class FirstTest {
                 "Can not find My list Button");
 
         waitForElementPresentAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/item_title'][@text='Java programming language']"),
+                By.xpath("//*[@resource-id='org.wikipedia:id/item_title'][@text='" + name_of_folder + "']"),
                 "Can not find List with text = ");
 
         waitForElementPresent(
-                By.xpath("//*[@text='Java programming language']"),
+                By.xpath("//*[@text='" + name_of_folder + "']"),
                 "sdsdsd");
 
 
         leftSwipeOnElement(
-                By.xpath("//*[@text='Java (programming language)']"),
+                By.xpath("//*[@text='" + articleTitle + "']"),
                 "Can not find Created List"
         );
         //*[@resource-id='org.wikipedia:id/page_list_item_container']
