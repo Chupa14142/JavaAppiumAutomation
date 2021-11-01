@@ -47,7 +47,54 @@ public class FirstTest {
 
 
     @Test
+    public void testAmountOfEmptySearch() {
+        waitForElementPresentAndClick(
+                By.xpath(
+                        "(//*[@class=\"android.widget.TextView\"])[1]"),
+                "Can't find the Search field", 15
+        );
+
+        waitForElementsPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_close_btn']"),
+                "Can't find Clear button"
+        );
+
+        String searchingText = "dfdfdfdfdf";
+        String search_result_locator = "//*[@resource-id='org.wikipedia:id/search_results_list']";
+        String no_results_xpath = "//*[@text='No results found']";
+
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Can't find the Search field",
+                searchingText);
+
+        waitForElementPresent(
+                By.xpath(no_results_xpath),
+                "Can't find No result text");
+
+        assertElementNoPresent(
+                By.xpath(search_result_locator),
+                search_result_locator + " is Present on the Screen"
+        );
+
+
+
+
+    }
+
+    @Test
+    public void testTest() {
+        WebElement element = driver.findElementByXPath("//*[contains(@text,'Search Wikipedia')]");
+        element.click();
+        waitForElementNotPresent(By.xpath("//*[contains(@text,'Search Wikipedia')]"),
+                "sdsd",14);
+    }
+
+
+
+    @Test
     public void testSaveSelectedArticle() {
+
         waitForElementPresentAndClick(
                 By.xpath(
                         "(//*[@class=\"android.widget.TextView\"])[1]"),
@@ -438,6 +485,19 @@ public class FirstTest {
                 .release()
                 .perform();
 
+    }
+
+    protected int getAmountOfElements(By by) {
+        List<WebElement> list = driver.findElements(by);
+        return list.size();
+    }
+
+    protected void assertElementNoPresent (By by, String error_message) {
+        int amountOfElements = getAmountOfElements(by);
+        if (amountOfElements > 0) {
+            String default_message = "An element '" + by.toString() + "' supposed not be present";
+            throw new AssertionError(default_message + " " + error_message);
+        }
     }
 
 
