@@ -8,7 +8,7 @@ public class MainPage {
 
 //    Search Wikipedia
     By searchFieldLocator = By.xpath("//*[@resource-id='org.wikipedia:id/search_container']");
-    By moreOptionsButtonLocator = By.xpath("//android.widget.ImageView[@content-desc=\"More options\"]");
+    By moreOptionsButtonLocator = By.xpath("//android.widget.ImageView[@content-desc='More options']");
     By goToPreviousPageButtonLocator = By.xpath("//*[@class=\"android.widget.ImageButton\"]");
     By closeSearchButtonLocator = By.xpath("//*[@resource-id='org.wikipedia:id/search_close_btn']");
 

@@ -42,6 +42,41 @@ public class FirstTest {
         driver.quit();
     }
 
+
+    @Test
+    public void saveTwoArticles() {
+        waitForElementPresentAndClick(
+                By.xpath(
+                        "(//*[@class=\"android.widget.TextView\"])[1]"),
+                "Can't find the Search field", 15
+        );
+
+        waitForElementsPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_close_btn']"),
+                "Can't find Clear button"
+        );
+
+        String searchingText = "java";
+
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Can't find the Search field",
+                searchingText);
+
+        String articleTitle = "Java (programming language)";
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='" +  articleTitle + "']"),
+                "Can't find Java (programming language) article" + searchingText);
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/view_page_header_image_placeholder"),
+                "Can't find page header"
+        );
+
+        clickMoreOptionsAndSelectOptionByText("Add to reading list","Can't find Share link option");
+
+    }
+
     @Test
     public void testCheckSearchArticleInBackground() {
         waitForElementPresentAndClick(
@@ -427,7 +462,7 @@ public class FirstTest {
     }
 
     private WebElement waitForElementPresentAndClear(By by, String error_message) {
-        return waitForElementPresentAndClear(by, error_message, 15);
+        return waitForElementPresentAndClear(by, error_message, 20);
     }
 
     private WebElement waitForElementPresentAndSendKeys(By by, String error_message, String value) {
@@ -594,11 +629,46 @@ public class FirstTest {
         }
     }
 
-
     private String waitForElementAndGetAttribute(By by, String error_message,String attribute, long timeoutInSeconds) {
         WebElement element = waitForElementPresent(by,error_message,timeoutInSeconds);
         return element.getAttribute(attribute);
     }
+
+
+// DZ
+
+    public void clickMoreOptionsAndSelectOptionByText(String option, String error_message) {
+        waitForElementPresentAndClick(By.xpath("//android.widget.ImageView[@content-desc='More options']"),
+                "Can't find More Options Button");
+        String optionsXpath = "//android.widget.LinearLayout//.[@text='%s']";
+        String selectedOption = String.format(optionsXpath,option);
+        By selectedOptionLocator = By.xpath(selectedOption);
+        waitForElementPresentAndClick(selectedOptionLocator,
+                error_message + "by locator: " + selectedOptionLocator);
+    }
+
+    public void createNewReadingListWithName(String readingListName, String error_message) {
+        By readingListInputLocator = By.xpath("//*[@text='My reading list' and @resource-id='org.wikipedia:id/text_input']");
+        waitForElementPresentAndSendKeys(readingListInputLocator, error_message, readingListName);
+        driver.findElement(By.xpath("//*[@text='OK']")).click();
+        waitForElementNotPresent(readingListInputLocator,"Reading List Input is still here",15);
+    }
+
+
+    public void addArticleToTheReadingList(String readingListName, String error_message) {
+        clickMoreOptionsAndSelectOptionByText("Add to reading list",error_message);
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/onboarding_button' and @text='GOT IT']"),
+                error_message);
+        waitForElementPresentAndSendKeys(
+                By.xpath("//*[@text='My reading list' and @resource-id='org.wikipedia:id/text_input']"),
+                error_message, readingListName
+        );
+    }
+
+
+
+
 
 
 }
