@@ -7,10 +7,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.Point;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -43,6 +40,103 @@ public class FirstTest {
     @After
     public void ternDown() {
         driver.quit();
+    }
+
+    @Test
+    public void testCheckSearchArticleInBackground() {
+        waitForElementPresentAndClick(
+                By.xpath(
+                        "(//*[@class=\"android.widget.TextView\"])[1]"),
+                "Can't find the Search field", 15
+        );
+
+        waitForElementsPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_close_btn']"),
+                "Can't find Clear button"
+        );
+
+        String searchingText = "java";
+
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Can't find the Search field",
+                searchingText);
+
+        String articleTitle = "Java (programming language)";
+
+        waitForElementPresent(
+                By.xpath("//*[@text='" +  articleTitle + "']"),
+                "Can't find Java (programming language) article" + searchingText);
+
+        driver.runAppInBackground(Duration.ofSeconds(2));
+
+        waitForElementPresent(
+                By.xpath("//*[@text='" +  articleTitle + "']"),
+                "Can't find Java (programming language) article" + searchingText);
+
+
+
+    }
+
+
+    @Test
+    public void testChangeScreenOrientationOnSearchResultPage() {
+
+        waitForElementPresentAndClick(
+                By.xpath(
+                        "(//*[@class=\"android.widget.TextView\"])[1]"),
+                "Can't find the Search field", 15
+        );
+
+        waitForElementsPresent(
+                By.xpath("//*[@resource-id='org.wikipedia:id/search_close_btn']"),
+                "Can't find Clear button"
+        );
+
+        String searchingText = "java";
+
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"),
+                "Can't find the Search field",
+                searchingText);
+
+        String articleTitle = "Java (programming language)";
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='" +  articleTitle + "']"),
+                "Can't find Java (programming language) article" + searchingText);
+
+        String title_before_rotation = waitForElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Can not find text of article",
+                "text", 15
+        );
+
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+
+        String title_after_rotation = waitForElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Can not find text of article",
+                "text", 15
+        );
+
+        Assert.assertEquals(
+                "Article title have benn change after rotation",
+                title_before_rotation, title_after_rotation);
+
+
+
+        driver.rotate(ScreenOrientation.PORTRAIT);
+        String title_after_second_rotation = waitForElementAndGetAttribute(
+                By.id("org.wikipedia:id/view_page_title_text"),
+                "Can not find text of article",
+                "text", 15
+        );
+
+        Assert.assertEquals(
+                "Article title have benn change after rotation",
+                title_before_rotation, title_after_second_rotation);
+
     }
 
 
@@ -498,6 +592,12 @@ public class FirstTest {
             String default_message = "An element '" + by.toString() + "' supposed not be present";
             throw new AssertionError(default_message + " " + error_message);
         }
+    }
+
+
+    private String waitForElementAndGetAttribute(By by, String error_message,String attribute, long timeoutInSeconds) {
+        WebElement element = waitForElementPresent(by,error_message,timeoutInSeconds);
+        return element.getAttribute(attribute);
     }
 
 
