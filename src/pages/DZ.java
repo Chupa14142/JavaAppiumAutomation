@@ -48,7 +48,7 @@ public class DZ {
 
 
     @Test
-    public void saveTwoArticles() {
+    public void testSaveTwoArticles() {
         clickInSearchInputAndSearchText("java");
 
         String first_article_title = getArticleTitleByNumber(1);
@@ -107,6 +107,19 @@ public class DZ {
                 "Can't find Articles container"
         );
         Assert.assertTrue("Count of Articles != 2",countArticlesInReadingListAfterDelete == 1);
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='"+ second_article_title + "']"),
+                "Can't find second article"
+        );
+
+        String articleTitle = waitForElementAndGetAttribute(
+                By.xpath("//*[@resource-id='org.wikipedia:id/view_page_title_text']"),
+                "","text",10);
+
+        Assert.assertTrue("Title isn't equals",second_article_title.equals(articleTitle));
+
+
 
     }
 
