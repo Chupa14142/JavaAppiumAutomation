@@ -11,7 +11,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Dimension;
-import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -48,7 +47,70 @@ public class DZ {
     }
 
 
- 
+    @Test
+    public void saveTwoArticles() {
+        clickInSearchInputAndSearchText("java");
+
+        String first_article_title = getArticleTitleByNumber(1);
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='" +  first_article_title + "']"),
+                "Can't find " + first_article_title + " title"
+        );
+
+        waitForElementPresent(
+                By.id("org.wikipedia:id/view_page_header_image_placeholder"),
+                "Can't find page header"
+        );
+
+        String name_of_new_list_name = "Java Reading List";
+
+        addArticleToTheNewReadingList(name_of_new_list_name,"Can't find Reading list button");
+
+        driver.navigate().back();
+
+        clickInSearchInputAndSearchText("java");
+
+
+        String second_article_title = getArticleTitleByNumber(2);
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='" +  second_article_title + "']"),
+                "Can't find " + second_article_title + " title"
+        );
+
+        addArticleToExistReadingList(name_of_new_list_name,"Can't find: " + name_of_new_list_name);
+
+        driver.navigate().back();
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@content-desc='My lists']"),"Can't find My list button");
+
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/item_title'][@text='" + name_of_new_list_name + "']"),
+                "Can't find Reading list"
+        );
+
+        int countArticlesInReadingListBeforeDelete = countOfElementsLocated(
+                By.xpath("(//*[@resource-id='org.wikipedia:id/page_list_item_container'])"),
+                "Can't find Articles container"
+        );
+
+        Assert.assertTrue("Count of Articles != 2",countArticlesInReadingListBeforeDelete == 2);
+
+        leftSwipeOnElement(
+                By.xpath("//*[@resource-id='org.wikipedia:id/page_list_item_title'][@text='"+ first_article_title + "']"),
+                "Can't find first article container"
+        );
+
+
+        int countArticlesInReadingListAfterDelete = countOfElementsLocated(
+                By.xpath("(//*[@resource-id='org.wikipedia:id/page_list_item_container'])"),
+                "Can't find Articles container"
+        );
+        Assert.assertTrue("Count of Articles != 2",countArticlesInReadingListAfterDelete == 1);
+
+    }
+
+
 
     private WebElement waitForElementPresent(By by, String error_message, long timeoutInSeconds) {
         WebDriverWait wait = new WebDriverWait(driver, timeoutInSeconds);
@@ -238,6 +300,26 @@ public class DZ {
 
 // DZ
 
+    public void clickInSearchInputAndSearchText(String searchingText) {
+        waitForElementPresentAndClick(
+                By.xpath("(//*[@class='android.widget.TextView'])[1]"), "Can't find the Search field");
+
+        waitForElementsPresent(By.xpath("//*[@resource-id='org.wikipedia:id/search_close_btn']"),
+                "Can't find Clear button");
+
+        waitForElementPresentAndSendKeys(
+                By.id("org.wikipedia:id/search_src_text"), "Can't find the Search field", searchingText
+        );
+
+    }
+
+    public String getArticleTitleByNumber(int number) {
+      String article_title = waitForElementAndGetAttribute(
+                By.xpath("(//*[@resource-id='org.wikipedia:id/page_list_item_title'])[" + number + "]"),
+                "Can't find " + number + " article title","text",15);
+      return article_title;
+    }
+
     public void clickMoreOptionsAndSelectOptionByText(String option, String error_message) {
         waitForElementPresentAndClick(By.xpath("//android.widget.ImageView[@content-desc='More options']"),
                 "Can't find More Options Button");
@@ -250,21 +332,28 @@ public class DZ {
 
     public void createNewReadingListWithName(String readingListName, String error_message) {
         By readingListInputLocator = By.xpath("//*[@text='My reading list' and @resource-id='org.wikipedia:id/text_input']");
+        waitForElementPresentAndClick(
+                By.xpath("//*[@resource-id='org.wikipedia:id/onboarding_button' and @text='GOT IT']"), error_message);
+
         waitForElementPresentAndSendKeys(readingListInputLocator, error_message, readingListName);
         driver.findElement(By.xpath("//*[@text='OK']")).click();
         waitForElementNotPresent(readingListInputLocator,"Reading List Input is still here",15);
     }
 
 
-    public void addArticleToTheReadingList(String readingListName, String error_message) {
+    public void addArticleToTheNewReadingList(String readingListName, String error_message) {
         clickMoreOptionsAndSelectOptionByText("Add to reading list",error_message);
-        waitForElementPresentAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/onboarding_button' and @text='GOT IT']"),
-                error_message);
-        waitForElementPresentAndSendKeys(
-                By.xpath("//*[@text='My reading list' and @resource-id='org.wikipedia:id/text_input']"),
-                error_message, readingListName
-        );
+        createNewReadingListWithName(readingListName,error_message);
+    }
+
+    public void addArticleToExistReadingList(String readingListName, String error_message) {
+        clickMoreOptionsAndSelectOptionByText("Add to reading list",error_message);
+        By listNameXpath = By.xpath("//*[@text='" + readingListName + "'][@resource-id='org.wikipedia:id/item_title']");
+        int countOfExistList = countOfElementsLocated(listNameXpath, error_message);
+        if(countOfExistList == 1) {
+            waitForElementPresentAndClick(listNameXpath,error_message);
+            waitForElementNotPresent(listNameXpath,"Element is already here " + listNameXpath,10);
+        } else throw new AssertionError("Listname with locator " + listNameXpath + "doesn't exist");
     }
 
 
