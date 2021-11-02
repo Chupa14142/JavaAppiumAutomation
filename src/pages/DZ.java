@@ -9,9 +9,7 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Dimension;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -39,6 +37,8 @@ public class DZ {
                 "/Users/vadimzakharkin/Desktop/learnQA/JavaAppiumAutomation/JavaAppiumAutomation/apks/org.wikipedia.apk");
 
         driver = new AndroidDriver(new URL("http://127.0.0.1:4723/wd/hub"), capabilities);
+        driver.rotate(ScreenOrientation.PORTRAIT);
+
     }
 
     @After
@@ -46,6 +46,26 @@ public class DZ {
         driver.quit();
     }
 
+
+
+
+    @Test
+    public void testFailCaseAfterLandscapeRotation() {
+        clickInSearchInputAndSearchText("java");
+
+        String first_article_title = getArticleTitleByNumber(1);
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='" +  first_article_title + "']"),
+                "Can't find " + first_article_title + " title"
+        );
+
+       By articleTitleLocator = By.xpath("//*[@resource-id='org.wikipedia:id/view_page_title_text']");
+       waitForElementPresent(articleTitleLocator,"Can't find an article title");
+
+        driver.rotate(ScreenOrientation.LANDSCAPE);
+        waitForElementPresentAndClick(By.xpath("//*[@text='undefined']"),"Failed Test");
+
+    }
 
     @Test
     public void openArticleAndAssertTitle() {
@@ -58,7 +78,7 @@ public class DZ {
         );
 
         By articleTitleLocator = By.xpath("//*[@resource-id='org.wikipedia:id/view_page_title_text']");
-//        waitForElementPresent(articleTitleLocator,"Can't find an article title");
+        waitForElementPresent(articleTitleLocator,"Can't find an article title");
         assertElementPresent(articleTitleLocator,"Can't find an article title");
     }
 
