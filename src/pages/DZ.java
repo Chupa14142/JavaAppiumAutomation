@@ -48,6 +48,21 @@ public class DZ {
 
 
     @Test
+    public void openArticleAndAssertTitle() {
+        clickInSearchInputAndSearchText("java");
+
+        String first_article_title = getArticleTitleByNumber(1);
+        waitForElementPresentAndClick(
+                By.xpath("//*[@text='" +  first_article_title + "']"),
+                "Can't find " + first_article_title + " title"
+        );
+
+        By articleTitleLocator = By.xpath("//*[@resource-id='org.wikipedia:id/view_page_title_text']");
+//        waitForElementPresent(articleTitleLocator,"Can't find an article title");
+        assertElementPresent(articleTitleLocator,"Can't find an article title");
+    }
+
+    @Test
     public void testSaveTwoArticles() {
         clickInSearchInputAndSearchText("java");
 
@@ -370,6 +385,14 @@ public class DZ {
     }
 
 
+    public boolean assertElementPresent(By by, String error_message) {
+        boolean isElementPresent = driver.findElement(by).isDisplayed();
+        if(isElementPresent) {
+            return true;
+        } else {
+            throw new AssertionError(error_message + " with locator: " + by);
+        }
+    }
 
 
 
