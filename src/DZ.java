@@ -1,5 +1,3 @@
-package pages;
-
 import io.appium.java_client.AppiumDriver;
 import io.appium.java_client.TouchAction;
 import io.appium.java_client.android.AndroidDriver;
@@ -66,6 +64,7 @@ public class DZ {
         waitForElementPresentAndClick(By.xpath("//*[@text='undefined']"),"Failed Test");
 
     }
+
 
     @Test
     public void openArticleAndAssertTitle() {
