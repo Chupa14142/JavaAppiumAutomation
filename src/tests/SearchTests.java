@@ -3,6 +3,8 @@ package tests;
 import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 
 public class SearchTests extends CoreTestCase {
 
@@ -49,6 +51,29 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.waitForEmptyResultsLabel();
         searchPageObject.assertThereIsNoResultsFound();
+    }
+
+//   DZ - refactoring
+    @Test
+    public void testCancelSearchWithFewFoundElements() {
+        String search_line = "manual";
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchInput(search_line);
+        searchPageObject.waitForListOfArticleTitlesToAppear();
+
+        int countOfElementWasFound = searchPageObject.getNumberOfArticleTitlesFoundAfterSearching();
+        assertTrue("countOfElementWasFound < 2", countOfElementWasFound > 2);
+
+        searchPageObject.clickCancelSearchButton();
+        searchPageObject.assertThereIsNoTitleFound();
+    }
+
+    @Test
+    public void testExample() {
+        WebElement element = driver.findElement(By.xpath("//*[@text='Search Wikipedia']"));
+        element.click();
     }
 
 }

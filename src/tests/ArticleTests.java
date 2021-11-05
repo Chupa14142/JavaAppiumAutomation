@@ -2,8 +2,10 @@ package tests;
 
 import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
+import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
+import org.openqa.selenium.By;
 
 public class ArticleTests extends CoreTestCase {
 
@@ -41,6 +43,26 @@ public class ArticleTests extends CoreTestCase {
 
     }
 
+    @Test
+    public void testAssertArticleTitlePresent() {
+        String search_line = "Appium";
+        String article_substring = "Appium";
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchInput(search_line);
+        searchPageObject.clickByArticleWithSubstring(article_substring);
+
+        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+
+//         Для проверки валидного кейса с title
+//        articlePageObject.waitForElementPresent(
+//                By.xpath("//*[@resource-id='org.wikipedia:id/view_page_title_text']"),
+//                "Can't find an article title");
+
+        assertTrue("Title isn't appear", articlePageObject.assertArticleTitlePresent());
+
+    }
 
 
 }

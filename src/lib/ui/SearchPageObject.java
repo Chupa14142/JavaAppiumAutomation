@@ -12,7 +12,9 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_CANCEL_BUTTON = "org.wikipedia:id/search_close_btn",
             SEARCH_RESULT_BY_SUBSTRING_TPL = "//*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            EMPTY_RESULTS_LABEL= "//*[@text='No results found']";
+            EMPTY_RESULTS_LABEL = "//*[@text='No results found']",
+    // FOR DZ
+    LIST_OF_ARTICLE_TITLES = "(//*[@resource-id='org.wikipedia:id/page_list_item_title'])";
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
@@ -34,11 +36,11 @@ public class SearchPageObject extends MainPageObject {
     }
 
     public void waitForCancelSearchButtonToAppear() {
-        waitForElementPresent(By.id(SEARCH_CANCEL_BUTTON),"Cannot find Cancel Button");
+        waitForElementPresent(By.id(SEARCH_CANCEL_BUTTON), "Cannot find Cancel Button");
     }
 
     public void waitForCancelSearchButtonToDisappear() {
-        waitForElementNotPresent(By.id(SEARCH_CANCEL_BUTTON),"Cancel button is still present");
+        waitForElementNotPresent(By.id(SEARCH_CANCEL_BUTTON), "Cancel button is still present");
     }
 
     public void clickCancelSearchButton() {
@@ -52,25 +54,47 @@ public class SearchPageObject extends MainPageObject {
                 "Cannot find search result with substring:" + substring);
     }
 
-
     public void clickByArticleWithSubstring(String substring) {
         String search_result_xpath = getResultSearchElement(substring);
         waitForElementPresentAndClick(By.xpath(search_result_xpath),
                 "Cannot find and CLick search result with substring:" + substring);
     }
 
-
     public int getAmountOfFoundArticles() {
-        this.waitForElementPresent(By.xpath(SEARCH_RESULT_ELEMENT),"Cannot find anything by the request");
+        this.waitForElementPresent(By.xpath(SEARCH_RESULT_ELEMENT), "Cannot find anything by the request");
         return this.getAmountOfElements(By.xpath(SEARCH_RESULT_ELEMENT));
     }
 
     public void waitForEmptyResultsLabel() {
-        waitForElementPresent(By.xpath(EMPTY_RESULTS_LABEL),"Cannot find empty result label");
+        waitForElementPresent(By.xpath(EMPTY_RESULTS_LABEL), "Cannot find empty result label");
     }
 
     public void assertThereIsNoResultsFound() {
         this.assertElementNoPresent(By.xpath(SEARCH_RESULT_ELEMENT), "We supposed not to find any results");
     }
+
+    public void waitForListOfArticleTitlesToAppear() {
+        this.waitForElementsPresent(By.xpath(LIST_OF_ARTICLE_TITLES), "Cannot find list of article titles");
+    }
+
+    public void waitForListOfArticleTitlesToDisappear() {
+        this.waitForElementNotPresent(By.xpath(LIST_OF_ARTICLE_TITLES), "List of Article is still present");
+    }
+
+    public int getNumberOfArticleTitlesFoundAfterSearching() {
+        return this.getAmountOfElements(By.xpath(LIST_OF_ARTICLE_TITLES));
+    }
+
+    public void assertThereIsNoTitleFound() {
+        this.assertElementNoPresent(By.xpath(LIST_OF_ARTICLE_TITLES), "We supposed not to find any titles");
+    }
+
+    public String getArticleTitleByNumber(int number) {
+        String article_title = waitForElementAndGetAttribute(
+                By.xpath(LIST_OF_ARTICLE_TITLES + "[" + number + "]"),
+                "Can't find article by number " + number ,"text",15);
+        return article_title;
+    }
+
 
 }

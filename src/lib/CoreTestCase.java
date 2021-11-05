@@ -42,7 +42,7 @@ public class CoreTestCase extends TestCase {
     }
 
     @Override
-    protected void tearDown() throws Exception{
+    protected void tearDown() throws Exception {
         driver.quit();
         super.tearDown();
     }
@@ -59,8 +59,7 @@ public class CoreTestCase extends TestCase {
         driver.runAppInBackground(Duration.ofSeconds(seconds));
     }
 
-
-
+    protected void goToPreviousPage() { driver.navigate().back(); }
 
 
 }

@@ -90,7 +90,7 @@ public class MainPageObject {
     }
 
     public boolean waitForElementNotPresent(By by, String error_message) {
-       return this.waitForElementNotPresent(by,error_message,15);
+        return this.waitForElementNotPresent(by, error_message, 15);
     }
 
 //    public boolean isSelectedTextPresent(By by, String error_message, String expectedText, long timeoutInSeconds) {
@@ -211,7 +211,7 @@ public class MainPageObject {
         return list.size();
     }
 
-    public void assertElementNoPresent (By by, String error_message) {
+    public void assertElementNoPresent(By by, String error_message) {
         int amountOfElements = getAmountOfElements(by);
         if (amountOfElements > 0) {
             String default_message = "An element '" + by.toString() + "' supposed not be present";
@@ -219,41 +219,20 @@ public class MainPageObject {
         }
     }
 
-    public String waitForElementAndGetAttribute(By by, String error_message,String attribute, long timeoutInSeconds) {
-        WebElement element = waitForElementPresent(by,error_message,timeoutInSeconds);
+    public String waitForElementAndGetAttribute(By by, String error_message, String attribute, long timeoutInSeconds) {
+        WebElement element = waitForElementPresent(by, error_message, timeoutInSeconds);
         return element.getAttribute(attribute);
     }
 
 
 // DZ
 
-    public void clickMoreOptionsAndSelectOptionByText(String option, String error_message) {
-        waitForElementPresentAndClick(By.xpath("//android.widget.ImageView[@content-desc='More options']"),
-                "Can't find More Options Button");
-        String optionsXpath = "//android.widget.LinearLayout//.[@text='%s']";
-        String selectedOption = String.format(optionsXpath,option);
-        By selectedOptionLocator = By.xpath(selectedOption);
-        waitForElementPresentAndClick(selectedOptionLocator,
-                error_message + "by locator: " + selectedOptionLocator);
+    public boolean assertElementPresent(By by) {
+        boolean isElementPresent = driver.findElement(by).isDisplayed();
+        if (isElementPresent) {
+            return true;
+        } else throw new AssertionError("Element with locator " + by + " is not present");
     }
 
-    public void createNewReadingListWithName(String readingListName, String error_message) {
-        By readingListInputLocator = By.xpath("//*[@text='My reading list' and @resource-id='org.wikipedia:id/text_input']");
-        waitForElementPresentAndSendKeys(readingListInputLocator, error_message, readingListName);
-        driver.findElement(By.xpath("//*[@text='OK']")).click();
-        waitForElementNotPresent(readingListInputLocator,"Reading List Input is still here",15);
-    }
-
-
-    public void addArticleToTheReadingList(String readingListName, String error_message) {
-        clickMoreOptionsAndSelectOptionByText("Add to reading list",error_message);
-        waitForElementPresentAndClick(
-                By.xpath("//*[@resource-id='org.wikipedia:id/onboarding_button' and @text='GOT IT']"),
-                error_message);
-        waitForElementPresentAndSendKeys(
-                By.xpath("//*[@text='My reading list' and @resource-id='org.wikipedia:id/text_input']"),
-                error_message, readingListName
-        );
-    }
 
 }
