@@ -2,6 +2,7 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 
 public class SearchPageObject extends MainPageObject {
 
@@ -14,16 +15,39 @@ public class SearchPageObject extends MainPageObject {
             SEARCH_RESULT_ELEMENT = "//*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
             EMPTY_RESULTS_LABEL = "//*[@text='No results found']",
     // FOR DZ
-    LIST_OF_ARTICLE_TITLES = "(//*[@resource-id='org.wikipedia:id/page_list_item_title'])";
+            LIST_OF_ARTICLE_TITLES = "(//*[@resource-id='org.wikipedia:id/page_list_item_title'])",
+            ARTICLE_TITLE_TPL = "android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title'][@text='{articleTitle}']",
+            ARTICLE_DESCRIPTION_TPL = "android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description'][@text='{articleDescription}']";
+//android.widget.LinearLayout[android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Java']]
+// [android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description'][@text='Island of Indonesia']]
+
+
 
     public SearchPageObject(AppiumDriver driver) {
         super(driver);
     }
 
+
     // TEMPLATES METHOD
     public String getResultSearchElement(String substring) {
         return SEARCH_RESULT_BY_SUBSTRING_TPL.replace("{SUBSTRING}", substring);
     }
+
+    private String getArticleTitleXpath(String article_title) {
+        return ARTICLE_TITLE_TPL.replace("{articleTitle}", article_title);
+    }
+
+    private String getArticleDescriptionXpath(String article_description) {
+        return ARTICLE_DESCRIPTION_TPL.replace("{articleDescription}", article_description);
+    }
+
+    //    GET an articleXpath By Title OR Description
+    public String getArticleXpathByTitleAndDescription(String article_title, String article_article_description) {
+        String articleXpathByTitleAndDescription = "//android.widget.LinearLayout[" +
+                getArticleTitleXpath(article_title) + "][" + getArticleDescriptionXpath(article_article_description) + "]";
+        return articleXpathByTitleAndDescription;
+    }
+
     // TEMPLATES METHOD
 
     public void initSearchInput() {
@@ -92,9 +116,15 @@ public class SearchPageObject extends MainPageObject {
     public String getArticleTitleByNumber(int number) {
         String article_title = waitForElementAndGetAttribute(
                 By.xpath(LIST_OF_ARTICLE_TITLES + "[" + number + "]"),
-                "Can't find article by number " + number ,"text",15);
+                "Can't find article by number " + number, "text", 15);
         return article_title;
     }
 
-
+    public void waitForElementByTitleOrDescription(String title, String description) {
+        String articleXpathByTitleAndDescription = getArticleXpathByTitleAndDescription(title, description);
+          this.waitForElementsPresent(
+                  By.xpath(articleXpathByTitleAndDescription),
+                  " \n Cannot find an Article with Title: " + title + " Or Description " + description
+          );
+    }
 }

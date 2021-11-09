@@ -19,7 +19,9 @@ public class ArticlePageObject extends MainPageObject {
     OPTIONS_BY_TEXT_TPL = "//android.widget.LinearLayout//.[@text='{selected_options}']",
     SAVE_TO_READING_LIST_MENU_TITLE = "//*[@text='Save to reading list']",
     NAME_OF_EXISTING_READING_LIST_TPL="//*[@resource-id='org.wikipedia:id/item_title'][@text='{reading_list_name}']",
-    MORE_OPTIONS_POPUP = "//*[@class='android.widget.ListView']";
+    MORE_OPTIONS_POPUP = "//*[@class='android.widget.ListView']",
+    ARTICLE_TITLE_TPL = "//*[(@resource-id='org.wikipedia:id/page_list_item_title' and @text='{articleTitle}')]",
+    ARTICLE_DESCRIPTION_TPL = "//*[(@resource-id='org.wikipedia:id/page_list_item_description' and @text='{articleDescription}')]";
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -100,6 +102,5 @@ public class ArticlePageObject extends MainPageObject {
     public boolean assertArticleTitlePresent(){
         return this.assertElementPresent(By.xpath(ARTICLE_TITLE));
     }
-
 
 }

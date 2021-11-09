@@ -7,6 +7,8 @@ import lib.ui.SearchPageObject;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
+import java.time.Duration;
+
 public class ArticleTests extends CoreTestCase {
 
     @Test

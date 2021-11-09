@@ -211,6 +211,11 @@ public class MainPageObject {
         return list.size();
     }
 
+    public int waitForElementsPresentAndGetAmount(By by,String error_message) {
+        List<WebElement> list = waitForElementsPresent(by,error_message);
+        return list.size();
+    }
+
     public void assertElementNoPresent(By by, String error_message) {
         int amountOfElements = getAmountOfElements(by);
         if (amountOfElements > 0) {

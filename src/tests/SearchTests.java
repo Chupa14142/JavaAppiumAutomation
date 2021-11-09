@@ -3,8 +3,7 @@ package tests;
 import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
 import org.junit.Test;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
+
 
 public class SearchTests extends CoreTestCase {
 
@@ -53,7 +52,7 @@ public class SearchTests extends CoreTestCase {
         searchPageObject.assertThereIsNoResultsFound();
     }
 
-//   DZ - refactoring
+    //   DZ - refactoring
     @Test
     public void testCancelSearchWithFewFoundElements() {
         String search_line = "manual";
@@ -71,9 +70,34 @@ public class SearchTests extends CoreTestCase {
     }
 
     @Test
-    public void testExample() {
-        WebElement element = driver.findElement(By.xpath("//*[@text='Search Wikipedia']"));
-        element.click();
+    public void testWaitForArticleByTitleAndDescription() {
+        String title = "Java";
+        String description = "Island of Indonesia";
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchInput(title);
+
+//      wait for article with selected title and description
+        searchPageObject.waitForElementByTitleOrDescription(title, description);
+
     }
+
+    @Test
+    public void testWaitForThreeArticlesByTitleAndDescription() {
+        String searching_text = "Java";
+        String[] titles = {"Java", "JavaScript", "Java (programming language)"};
+        String[] descriptions = {"Island of Indonesia", "Programming language", "Object-oriented programming language"};
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchInput(searching_text);
+
+        for (int i = 0; i < titles.length; i++) {
+            System.out.println("Article Title and Description are: " + titles[i] + " | " + descriptions[i]);
+            searchPageObject.waitForElementByTitleOrDescription(titles[i], descriptions[i]);
+        }
+    }
+
 
 }
