@@ -100,4 +100,19 @@ public class SearchTests extends CoreTestCase {
     }
 
 
+    @Test
+    public void testWaitForArticleByTitleAndDescriptionEx9() {
+        String title = "Java";
+        String description = "Island of Indonesia";
+
+        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        searchPageObject.initSearchInput();
+        searchPageObject.typeSearchInput(title);
+
+//      wait for article with selected title and description
+        searchPageObject.waitForElementByTitleOrDescription(title, description);
+
+    }
+
+
 }
