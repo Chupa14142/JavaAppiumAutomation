@@ -92,7 +92,6 @@ public class SearchTests extends CoreTestCase {
         SearchPageObject searchPageObject = new SearchPageObject(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(searching_text);
-
         for (int i = 0; i < titles.length; i++) {
             System.out.println("Article Title and Description are: " + titles[i] + " | " + descriptions[i]);
             searchPageObject.waitForElementByTitleOrDescription(titles[i], descriptions[i]);
