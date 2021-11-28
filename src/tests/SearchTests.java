@@ -2,6 +2,7 @@ package tests;
 
 import lib.CoreTestCase;
 import lib.ui.SearchPageObject;
+import lib.ui.factory.SearchPageObjectFactory;
 import org.junit.Test;
 
 
@@ -9,7 +10,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testSearchResult() {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput("Java");
         searchPageObject.waitForSearchResult("Object-oriented programming language");
@@ -18,7 +19,7 @@ public class SearchTests extends CoreTestCase {
 
     @Test
     public void testCancelSearch() {
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
 
         searchPageObject.initSearchInput();
 //          searchPageObject.typeSearchInput("Java");
@@ -32,7 +33,7 @@ public class SearchTests extends CoreTestCase {
     public void testAmountOfNotEmptySearch() {
         String search_line = "Linkin Park Discography";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(search_line);
         int amount_of_search_results = searchPageObject.getAmountOfFoundArticles();
@@ -45,7 +46,7 @@ public class SearchTests extends CoreTestCase {
     public void testAmountOfEmptySearch() {
         String search_line = "fffgfgfg";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.waitForEmptyResultsLabel();
@@ -57,7 +58,7 @@ public class SearchTests extends CoreTestCase {
     public void testCancelSearchWithFewFoundElements() {
         String search_line = "manual";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.waitForListOfArticleTitlesToAppear();
@@ -74,7 +75,7 @@ public class SearchTests extends CoreTestCase {
         String title = "Java";
         String description = "Island of Indonesia";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(title);
 
@@ -89,7 +90,7 @@ public class SearchTests extends CoreTestCase {
         String[] titles = {"Java", "JavaScript", "Java (programming language)"};
         String[] descriptions = {"Island of Indonesia", "Programming language", "Object-oriented programming language"};
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(searching_text);
         for (int i = 0; i < titles.length; i++) {
@@ -104,7 +105,7 @@ public class SearchTests extends CoreTestCase {
         String title = "Java";
         String description = "Island of Indonesia";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(title);
 

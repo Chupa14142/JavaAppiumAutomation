@@ -4,6 +4,7 @@ import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factory.SearchPageObjectFactory;
 import org.junit.Test;
 import org.openqa.selenium.By;
 
@@ -16,7 +17,7 @@ public class ArticleTests extends CoreTestCase {
         String search_line = "Java";
         String article_substring = "Object-oriented programming language";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.clickByArticleWithSubstring(article_substring);
@@ -34,7 +35,7 @@ public class ArticleTests extends CoreTestCase {
         String search_line = "Appium";
         String article_substring = "Appium";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.clickByArticleWithSubstring(article_substring);
@@ -50,7 +51,7 @@ public class ArticleTests extends CoreTestCase {
         String search_line = "Appium";
         String article_substring = "Appium";
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.clickByArticleWithSubstring(article_substring);

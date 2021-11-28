@@ -4,23 +4,20 @@ import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 
-public class SearchPageObject extends MainPageObject {
+abstract public class SearchPageObject extends MainPageObject {
 
 
-    private static final String
-            SEARCH_ELEMENT_INIT = "xpath://*[@text='Search Wikipedia']",
-            SEARCH_INPUT = "xpath://*[contains(@text,'Search…')]",
-            SEARCH_CANCEL_BUTTON = "id:org.wikipedia:id/search_close_btn",
-            SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_container']//*[@text='{SUBSTRING}']",
-            SEARCH_RESULT_ELEMENT = "xpath://*[@resource-id='org.wikipedia:id/search_results_list']/*[@resource-id='org.wikipedia:id/page_list_item_container']",
-            EMPTY_RESULTS_LABEL = "xpath://*[@text='No results found']",
+     protected static String
+            SEARCH_ELEMENT_INIT,
+            SEARCH_INPUT,
+            SEARCH_CANCEL_BUTTON,
+            SEARCH_RESULT_BY_SUBSTRING_TPL,
+            SEARCH_RESULT_ELEMENT,
+            EMPTY_RESULTS_LABEL,
     // FOR DZ
-            LIST_OF_ARTICLE_TITLES = "xpath:(//*[@resource-id='org.wikipedia:id/page_list_item_title'])",
-//android.widget.LinearLayout[android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_title'][@text='Java']]
-// [android.widget.TextView[@resource-id='org.wikipedia:id/page_list_item_description'][@text='Island of Indonesia']]
+            LIST_OF_ARTICLE_TITLES,
 
-            ARTICLE_TITLE_AND_DESCRIPTION_TPL =
-                    "xpath://android.widget.LinearLayout/android.widget.TextView[@text='{TITLE}']/../android.widget.TextView[@text='{DESCRIPTION}']";
+            ARTICLE_TITLE_AND_DESCRIPTION_TPL;
 
 
 

@@ -5,6 +5,7 @@ import lib.ui.ArticlePageObject;
 import lib.ui.MyListsPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factory.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class MyListTests extends CoreTestCase {
@@ -17,7 +18,7 @@ public class MyListTests extends CoreTestCase {
         String name_of_folder = "Java programming language";
 
 
-        SearchPageObject searchPageObject = new SearchPageObject(driver);
+        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.clickByArticleWithSubstring(article_substring);
@@ -44,7 +45,7 @@ public class MyListTests extends CoreTestCase {
 //        String search_line = "Java";
 //        String name_of_reading_list_folder = this.getName();
 //
-//        SearchPageObject searchPageObject = new SearchPageObject(driver);
+//        SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
 //        searchPageObject.initSearchInput();
 //        searchPageObject.typeSearchInput(search_line);
 //
