@@ -4,6 +4,7 @@ import lib.CoreTestCase;
 import lib.ui.ArticlePageObject;
 import lib.ui.MainPageObject;
 import lib.ui.SearchPageObject;
+import lib.ui.factory.ArticlePageObjectFactory;
 import lib.ui.factory.SearchPageObjectFactory;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -22,7 +23,7 @@ public class ArticleTests extends CoreTestCase {
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.clickByArticleWithSubstring(article_substring);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         String article_title = articlePageObject.getArticleTitle();
 
         assertEquals("We see unexpected title!",
@@ -32,15 +33,15 @@ public class ArticleTests extends CoreTestCase {
 
     @Test
     public void testSwipeArticle() {
-        String search_line = "Appium";
-        String article_substring = "Appium";
+        String search_line = "Java";
+        String article_substring = "Java (programming language)";
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);
         searchPageObject.initSearchInput();
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.clickByArticleWithSubstring(article_substring);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
         articlePageObject.swipeToFooter();
 
@@ -56,7 +57,7 @@ public class ArticleTests extends CoreTestCase {
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.clickByArticleWithSubstring(article_substring);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
 
 //         Для проверки валидного кейса с title
 //        articlePageObject.waitForElementPresent(

@@ -1,21 +1,25 @@
 package tests;
 
 import lib.CoreTestCase;
+import lib.Platform;
 import lib.ui.ArticlePageObject;
 import lib.ui.MyListsPageObject;
 import lib.ui.NavigationUI;
 import lib.ui.SearchPageObject;
+import lib.ui.factory.ArticlePageObjectFactory;
+import lib.ui.factory.MyListsPageObjectFactory;
+import lib.ui.factory.NavigationUIFactory;
 import lib.ui.factory.SearchPageObjectFactory;
 import org.junit.Test;
 
 public class MyListTests extends CoreTestCase {
+    private static final String name_of_folder = "Learning programming";
 
     @Test
     public void testSaveSelectedArticle() {
 
-        String search_line = "Appium";
-        String article_substring = "Appium";
-        String name_of_folder = "Java programming language";
+        String search_line = "Java";
+        String article_substring = "Object-oriented programming language";
 
 
         SearchPageObject searchPageObject = SearchPageObjectFactory.get(driver);;
@@ -23,17 +27,27 @@ public class MyListTests extends CoreTestCase {
         searchPageObject.typeSearchInput(search_line);
         searchPageObject.clickByArticleWithSubstring(article_substring);
 
-        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
         articlePageObject.waitForTitleElement();
         String article_title = articlePageObject.getArticleTitle();
-        articlePageObject.addArticleToMyList(name_of_folder);
+
+        if(Platform.getInstance().isAndroid()) {
+             articlePageObject.addArticleToMyList(name_of_folder);
+        } else {
+            articlePageObject.addArticleToMySavedList();
+            articlePageObject.closeModalWindow();
+        }
+
         articlePageObject.closeArticle();
 
-        NavigationUI navigationUI = new NavigationUI(driver);
+        NavigationUI navigationUI = NavigationUIFactory.get(driver);
         navigationUI.clickMyLists();
 
-        MyListsPageObject myListsPageObject = new MyListsPageObject(driver);
-        myListsPageObject.openFolderByName(name_of_folder);
+        MyListsPageObject myListsPageObject = MyListsPageObjectFactory.get(driver);
+        if(Platform.getInstance().isAndroid()) {
+            myListsPageObject.openFolderByName(name_of_folder);
+        }
+
         myListsPageObject.swipeByArticleToDelete(article_title);
 
     }
@@ -52,7 +66,7 @@ public class MyListTests extends CoreTestCase {
 //        String first_article_title = searchPageObject.getArticleTitleByNumber(1);
 //        searchPageObject.clickByArticleWithSubstring(first_article_title);
 //
-//        ArticlePageObject articlePageObject = new ArticlePageObject(driver);
+//        ArticlePageObject articlePageObject = ArticlePageObjectFactory.get(driver);
 //        articlePageObject.addArticleToMyList(name_of_reading_list_folder);
 //        articlePageObject.closeArticle();
 //

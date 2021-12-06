@@ -1,28 +1,30 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
-public class ArticlePageObject extends MainPageObject {
+abstract public class ArticlePageObject extends MainPageObject {
 
 
-    private static final String
-            ARTICLE_TITLE = "xpath://*[@resource-id='org.wikipedia:id/view_page_title_text']",
-            FOOTER_ELEMENT = "xpath://*[@text='View page in browser']",
-            OPTIONS_BUTTON = "xpath://android.widget.ImageView[@content-desc='More options']",
-            OPTIONS_ADD_TO_MY_LIST_BUTTON = "xpath://*[@text='Add to reading list']",
-            ADD_TO_MY_LIST_OVERLAY = "xpath://*[@text='GOT IT']",
-            MY_LIST_NAME_INPUT = "xpath://*[@resource-id='org.wikipedia:id/text_input']",
-            MY_LIST_OK_BUTTON = "xpath://*[@text='OK']",
-            CLOSE_ARTICLE_BUTTON = "xpath://android.widget.ImageButton[@content-desc='Navigate up']",
+    protected static String
+            ARTICLE_TITLE,
+            FOOTER_ELEMENT,
+            OPTIONS_BUTTON,
+            OPTIONS_ADD_TO_MY_LIST_BUTTON,
+            ADD_TO_MY_LIST_OVERLAY,
+            MY_LIST_NAME_INPUT,
+            MY_LIST_OK_BUTTON,
+            CLOSE_ARTICLE_BUTTON,
+            CLOSE_MODAL_WINDOW,
     //    DZ
-    OPTIONS_BY_TEXT_TPL = "xpath://android.widget.LinearLayout//.[@text='{selected_options}']",
-    SAVE_TO_READING_LIST_MENU_TITLE = "xpath://*[@text='Save to reading list']",
-    NAME_OF_EXISTING_READING_LIST_TPL="xpath://*[@resource-id='org.wikipedia:id/item_title'][@text='{reading_list_name}']",
-    MORE_OPTIONS_POPUP = "xpath://*[@class='android.widget.ListView']",
-    ARTICLE_TITLE_TPL = "xpath://*[(@resource-id='org.wikipedia:id/page_list_item_title' and @text='{articleTitle}')]",
-    ARTICLE_DESCRIPTION_TPL = "xpath://*[(@resource-id='org.wikipedia:id/page_list_item_description' and @text='{articleDescription}')]";
+    OPTIONS_BY_TEXT_TPL,
+    SAVE_TO_READING_LIST_MENU_TITLE,
+    NAME_OF_EXISTING_READING_LIST_TPL,
+    MORE_OPTIONS_POPUP,
+    ARTICLE_TITLE_TPL,
+    ARTICLE_DESCRIPTION_TPL;
 
     public ArticlePageObject(AppiumDriver driver) {
         super(driver);
@@ -38,16 +40,23 @@ public class ArticlePageObject extends MainPageObject {
 
     public WebElement waitForTitleElement() {
         return this.waitForElementPresent(ARTICLE_TITLE, "Cannot find article on page!");
-
     }
 
     public String getArticleTitle() {
         WebElement title_element = waitForTitleElement();
-        return title_element.getAttribute("text");
+        if(Platform.getInstance().isAndroid()) {
+            return title_element.getAttribute("text");
+        } else {
+            return title_element.getAttribute("name");
+        }
     }
 
     public void swipeToFooter() {
-        this.swipeToFindElement(FOOTER_ELEMENT, "Cannot swipe to footer", 30);
+        if(Platform.getInstance().isAndroid()) {
+        this.swipeToFindElement(FOOTER_ELEMENT, "Cannot swipe to footer", 40);
+        } else {
+            this.swipeUpTillElementAppear(FOOTER_ELEMENT,"Cannot swipe to footer",40);
+        }
 
     }
 
@@ -59,6 +68,18 @@ public class ArticlePageObject extends MainPageObject {
         this.waitForElementPresentAndSendKeys(MY_LIST_NAME_INPUT,
                 "Can't find Name of this list input", name_of_folder);
         this.waitForElementPresentAndClick(MY_LIST_OK_BUTTON, "Can't find OK Button");
+    }
+
+    public void addArticleToMySavedList() {
+        this.waitForElementPresentAndClick(
+                OPTIONS_ADD_TO_MY_LIST_BUTTON,
+                "Cannot find Options to Add article to the reading list");
+    }
+
+    public void closeModalWindow() {
+        this.waitForElementPresentAndClick(
+                CLOSE_MODAL_WINDOW,"Cannot find Modal window locator");
+        this.waitForElementNotPresent(CLOSE_MODAL_WINDOW,"Modal window is still present");
     }
 
     public void closeArticle() {

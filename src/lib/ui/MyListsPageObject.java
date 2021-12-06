@@ -1,15 +1,17 @@
 package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
+import lib.Platform;
 
 
-public class MyListsPageObject extends MainPageObject {
-    private static final String
-            FOLDER_BY_NAME_TPL = "xpath://*[@text='{FOLDER_NAME}']",
-            ARTICLE_BY_TITLE_TPL = "xpath://*[@text='{ARTICLE_TITLE}']",
+abstract public class MyListsPageObject extends MainPageObject {
+
+    protected static String
+            FOLDER_BY_NAME_TPL,
+            ARTICLE_BY_TITLE_TPL,
 //         DZ
-           LIST_OF_ARTICLES_CONTAINER = "xpath://*[@resource-id='org.wikipedia:id/page_list_item_image_container']",
-           YOU_HAVE_NO_ARTICLES_TITLE = "xpath://*[@resource-id='org.wikipedia:id/reading_list_empty_text']";
+            LIST_OF_ARTICLES_CONTAINER,
+            YOU_HAVE_NO_ARTICLES_TITLE;
 
 
 
@@ -46,6 +48,10 @@ public class MyListsPageObject extends MainPageObject {
         String article_xpath = getSavedArticleXpathByTitle(article_title);
         this.swipeElementToLeft(article_xpath, "Cannot swiped article with title " + article_title
         );
+        if(Platform.getInstance().isIOS()) {
+            this.clickElementToTheRightUpperCorner(
+                    article_xpath,"Cannot find saved article by: " + article_xpath);
+        }
         this.waitForArticleToDisappearByTitle(article_title);
     }
 

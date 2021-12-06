@@ -56,8 +56,8 @@ public class Platform {
         capabilities.setCapability("deviceName", "andr80");
         capabilities.setCapability("platformVersion", "8.0");
         capabilities.setCapability("automationName", "Appium");
-        capabilities.setCapability("appPackage", "org.wikipedia");
-        capabilities.setCapability("appActivity", ".main.MainActivity");
+//        capabilities.setCapability("appPackage", "org.wikipedia");
+//        capabilities.setCapability("appActivity", ".main.MainActivity");
         capabilities.setCapability("app",
                 "/Users/vadimzakharkin/Desktop/learnQA/JavaAppiumAutomation/JavaAppiumAutomation/apks/org.wikipedia.apk");
         return capabilities;

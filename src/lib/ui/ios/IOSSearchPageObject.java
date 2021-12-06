@@ -10,7 +10,7 @@ public class IOSSearchPageObject extends SearchPageObject {
         SEARCH_INPUT = "xpath://XCUIElementTypeSearchField[@value='Search Wikipedia']";
         SEARCH_CANCEL_BUTTON = "id:Close";
 //      SEARCH_CANCEL_MINI_BUTTON = "id:clear mini";
-        SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://XCUIElementTypeStaticText[@name= '{SUBSTRING}']";
+        SEARCH_RESULT_BY_SUBSTRING_TPL = "xpath://XCUIElementTypeStaticText[@name='{SUBSTRING}']";
         SEARCH_RESULT_ELEMENT = "xpath:(//XCUIElementTypeCollectionView)[2]/XCUIElementTypeCell";
         EMPTY_RESULTS_LABEL = "xpath://XCUIElementTypeStaticText[@name='No results found']";
         // FOR DZ
@@ -18,9 +18,6 @@ public class IOSSearchPageObject extends SearchPageObject {
         ARTICLE_TITLE_AND_DESCRIPTION_TPL =
                 "xpath://XCUIElementTypeStaticText[@name='{TITLE}']/../XCUIElementTypeStaticText[@name={DESCRIPTION}']";
     }
-
-
-
 
 
 
